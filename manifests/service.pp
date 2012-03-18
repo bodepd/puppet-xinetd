@@ -1,4 +1,3 @@
-
 # Definition: xinetd::service
 #
 # sets up a xinetd service
@@ -38,19 +37,33 @@
 #       per_source  => "11",
 #   } # xinetd::service
 #
-define xinetd::service ($cps = undef, $flags = undef, $per_source = undef, $port, $server, $server_args = undef, $disable = "no", $socket_type = "stream", $protocol = "tcp", $user = "root", $group = "root", $instances = "UNLIMITED", $wait = undef, $bind = '0.0.0.0') {
-    if $wait {
-        $mywait = $wait
-    } else {
-        $mywait = $protocol ? {
-            tcp => "no",
-            udp => "yes"
-        }
-    } # fi $wait
+define xinetd::service(
+  $cps = undef,
+  $flags = undef,
+  $per_source = undef,
+  $port, $server,
+  $server_args = undef,
+  $disable = "no",
+  $socket_type = "stream",
+  $protocol = "tcp",
+  $user = "root",
+  $group = "root",
+  $instances = "UNLIMITED",
+  $wait = undef,
+  $bind = '0.0.0.0'
+) {
+  if $wait {
+    $mywait = $wait
+  } else {
+    $mywait = $protocol ? {
+      tcp => "no",
+      udp => "yes"
+    }
+  }
 
-    file { "/etc/xinetd.d/$name":
-        content => template("xinetd/service.erb"),
-        notify  => Service["xinetd"],
-    } # file
-} # define service
+  file { "/etc/xinetd.d/$name":
+    content => template("xinetd/service.erb"),
+    notify  => Service["xinetd"],
+  }
+}
 

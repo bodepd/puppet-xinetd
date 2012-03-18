@@ -4,23 +4,23 @@
 #
 # Sample Usage:
 #   xinetd::service {"rsync":
-#       port        => "873",
-#       server      => "/usr/bin/rsync",
-#       server_args => "--daemon --config /etc/rsync.conf",
+#     port        => "873",
+#     server      => "/usr/bin/rsync",
+#     server_args => "--daemon --config /etc/rsync.conf",
 #  }
 #
 class xinetd {
 
-    package { "xinetd": }
+  package { "xinetd": }
 
-    file { "/etc/xinetd.conf":
-        source => "puppet:///modules/xinetd/xinetd.conf",
-    } # file
+  file { "/etc/xinetd.conf":
+    source => "puppet:///modules/xinetd/xinetd.conf",
+  }
 
-    service { "xinetd":
-        ensure  => running,
-        enable  => true,
-        require => [ Package["xinetd"], File["/etc/xinetd.conf"] ],
-        restart => "/etc/init.d/xinetd reload",
-    } # service
-} # class xinetd
+  service { "xinetd":
+    ensure  => running,
+    enable  => true,
+    require => [ Package["xinetd"], File["/etc/xinetd.conf"] ],
+    restart => "/etc/init.d/xinetd reload",
+  }
+}
